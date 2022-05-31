@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "Dinamica.h"
 #include "Matriz.h"
+#include "Lista.h"
 
 typedef struct
 {
@@ -116,11 +117,6 @@ void main()
     MatrizExtendida[(LinhasExtend * ColunasExtend) - 1] = MatrizExtendida[(ColunasExtend - 2) * ColunasExtend + LinhasExtend - 1]; // Inferior Direita
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ImprimeMatriz(MatrizExtendida, LinhasExtend, ColunasExtend);
-
-    // printf("\nMatriz Intensidade Luminosa: ");
-    // ImprimeMatriz(MatrizIL, Linhas, Colunas);
-    // printf("\n.........");
 
     // Criamos a matriz para receber os valores do gradiente.
     float *MatrizWPesos = CriaMatriz(Linhas, Colunas);
@@ -216,24 +212,30 @@ void main()
             }
         }
     }
-    ImprimeMatriz(MatrizWPesos, Linhas, Colunas);
+    // ImprimeMatriz(MatrizWPesos, Linhas, Colunas);
     printf("\n-------------------------------\n");
     ImprimeMatriz(MatrizDinamica, Linhas, Colunas);
 
-    // Achando o menor caminho da Matriz Dinâmica
-    for (int x = 0; x < Colunas; x++)
+    int k = 0;
+    float * List = malloc(Linhas * sizeof(float));
+    int y = 0;
+    while (k == 0)
     {
-        for (int y = 0; y < Linhas; y++)
-        {
-            if(x == 0)
-            {
-                
-            }
-        }
-    }
 
-    // PAREI AQUI, falta somente a função para poder analisar e retirar o menor caminho. Lembrando que tenho que fazer a transposta da matriz
-    // para poder retirar a coluna.
-    //  - Função Retira Menor Caminho
-    //  - Função faz transposta
+        for (y = 0; y < Colunas; y++)
+        {
+            List[y] = MatrizDinamica[y];
+        }
+
+        List[y] = '\0'; // Sinaliza como final da lista
+
+        k++;
+    }
+    int PosMenorNmr = PosicaoMenor(List);
+    int *Lista = (int *)malloc(Linhas * sizeof(int));
+    PosicaoDosMenoresCaminhos(MatrizDinamica, PosMenorNmr, Linhas, Colunas, &Lista);
+    ImprimeListaIndices(Lista);
+
+    //PAREI AQUI: falta atribuir de forma correta os indices do menor caminho da matriz na ultima função de Matriz.c
+    //falta também fazer a função para transpor a matriz.
 }
