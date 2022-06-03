@@ -1,5 +1,5 @@
-make --dry-run --keep-going --print-directory
-make: Entering directory '/home/mendeszika/Documentos/TP2/SobelApp'
-gcc -g Main.c Matriz.c Dinamica.c Lista.c -o a -lm
-make: Leaving directory '/home/mendeszika/Documentos/TP2/SobelApp'
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/mendeszika/Downloads/TP2 - QuintaFeira/SobelApp'
+gcc -g Main.c Matriz.c Dinamica.c Lista.c imagem.c -o Programa -lm
+make: Leaving directory '/home/mendeszika/Downloads/TP2 - QuintaFeira/SobelApp'
  

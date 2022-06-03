@@ -1,16 +1,12 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # GNU Make 4.3
- 
 # Built for x86_64-pc-linux-gnu
- 
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
- 
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
- 
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon May 30 19:22:35 2022
+# Make data base, printed on Thu Jun  2 22:38:34 2022
 
 # Variables
 
@@ -19,7 +15,7 @@ GDK_BACKEND = x11
 # environment
 LC_ALL = C
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-34506faa-a248-4f5f-ac21-ac1b34f5b0bf.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-dbe87f62-50f1-4367-a882-236724a600db.sock
 # environment
 LC_NAME = pt_BR.UTF-8
 # environment
@@ -39,7 +35,7 @@ VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
 .VARIABLES := 
 # environment
-PWD = /home/mendeszika/Documentos/TP2/SobelApp
+PWD = /home/mendeszika/Downloads/TP2 - QuintaFeira/SobelApp
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # environment
@@ -65,11 +61,11 @@ XAUTHORITY = /home/mendeszika/.Xauthority
 # makefile
 MAKEFLAGS = pqrR
 # makefile
-CURDIR := /home/mendeszika/Documentos/TP2/SobelApp
+CURDIR := /home/mendeszika/Downloads/TP2 - QuintaFeira/SobelApp
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # environment
 LESSOPEN = | /usr/bin/lesspipe %s
 # automatic
@@ -77,7 +73,7 @@ LESSOPEN = | /usr/bin/lesspipe %s
 # environment
 MFLAGS = -pqrR
 # environment
-SSH_AUTH_SOCK = /tmp/ssh-XXXXXXOCfKoD/agent.945
+SSH_AUTH_SOCK = /tmp/ssh-XXXXXXJviUhn/agent.970
 # default
 .SHELLFLAGS := -c
 # environment
@@ -93,7 +89,7 @@ MAKEFILE_LIST := Makefile
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 1174
+VSCODE_PID = 2622
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
@@ -185,7 +181,7 @@ MAKE_VERSION := 4.3
 # environment
 LC_MEASUREMENT = pt_BR.UTF-8
 # environment
-SSH_AGENT_PID = 989
+SSH_AGENT_PID = 1013
 # environment
 _ = /usr/share/code/code
 # environment
@@ -235,9 +231,9 @@ LC_IDENTIFICATION = pt_BR.UTF-8
 
 # Directories
 
-# . (device 2049, inode 976805): 15 files, no impossibilities.
+# . (device 2049, inode 968735): 18 files, no impossibilities.
 
-# 15 files, no impossibilities in 1 directories.
+# 18 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -248,7 +244,7 @@ LC_IDENTIFICATION = pt_BR.UTF-8
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-30 19:22:21.412676077
+#  Last modified 2022-06-01 17:34:56
 #  File has been updated.
 #  Successfully updated.
 
@@ -284,10 +280,10 @@ all:
 # variable set hash-table stats:
 # Load=8/32=25%, Rehash=0, Collisions=1/11=9%
 #  recipe to execute (from 'Makefile', line 2):
-	gcc -g Main.c Matriz.c Dinamica.c Lista.c -o a -lm
+ 
+	gcc -g Main.c Matriz.c Dinamica.c Lista.c imagem.c -o Programa -lm
 
 # Not a target:
- 
 .SUFFIXES:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -301,12 +297,12 @@ all:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 20 / storage = 164 B / avg = 8 B
-# current buf: size = 8162 B / used = 164 B / count = 20 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 23 / storage = 198 B / avg = 8 B
+# current buf: size = 8162 B / used = 198 B / count = 23 / avg = 8 B
 
-# strcache performance: lookups = 27 / hit rate = 25%
+# strcache performance: lookups = 30 / hit rate = 23%
 # hash-table stats:
-# Load=20/8192=0%, Rehash=0, Collisions=0/27=0%
-# Finished Make data base on Mon May 30 19:22:35 2022
+# Load=23/8192=0%, Rehash=0, Collisions=0/30=0%
+# Finished Make data base on Thu Jun  2 22:38:34 2022
 
  

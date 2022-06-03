@@ -1,74 +1,70 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 #include "Dinamica.h"
 #include "Matriz.h"
 #include "Lista.h"
-
-typedef struct
-{
-
-    int R, G, B;
-
-} Pixel;
+#include "imagem.h"
 
 void main()
 {
 
+    Imagem ImagemEntrada;
+
     float pixel_x;
     float pixel_y;
 
-    int Linhas = 3;
-    int Colunas = 3;
+    char *Entrada = "bird.ppm";
 
-    Pixel Matriz[3][3];
-    // Primeira Linha
-    Matriz[0][0].R = 255, Matriz[0][0].G = 0, Matriz[0][0].B = 0;     // Elemento [0,0]
-    Matriz[0][1].R = 0, Matriz[0][1].G = 0, Matriz[0][1].B = 0;       // Elemento [0,1]
-    Matriz[0][2].R = 255, Matriz[0][2].G = 255, Matriz[0][2].B = 255; // Elemento [0,2]
+    ImagemEntrada = lerArquivoPPM(Entrada);
 
-    // Segunda Linha
-    Matriz[1][0].R = 0, Matriz[1][0].G = 0, Matriz[1][0].B = 0;   // Elemento [1,0]
-    Matriz[1][1].R = 0, Matriz[1][1].G = 255, Matriz[1][1].B = 0; // Elemento [1,1]
-    Matriz[1][2].R = 0, Matriz[1][2].G = 0, Matriz[1][2].B = 0;   // Elemento [1,2]
-
-    // Terceira Linha
-    Matriz[2][0].R = 128, Matriz[2][0].G = 128, Matriz[2][0].B = 128; // Elemento [2,0]
-    Matriz[2][1].R = 0, Matriz[2][1].G = 0, Matriz[2][1].B = 0;       // Elemento [2,1]
-    Matriz[2][2].R = 0, Matriz[2][2].G = 0, Matriz[2][2].B = 255;     // Elemento [2,2]
+    int Linhas = ImagemEntrada.altura;
+    int Colunas = ImagemEntrada.largura;
 
     // Cria a matriz de intensidade luminosa
     float *MatrizIL = CriaMatriz(Linhas, Colunas);
 
-    // Coloca os valores dentro da matriz de intensidade luminosa
-    for (int i = 0; i < Colunas; i++)
-    {
-        for (int j = 0; j < Linhas; j++)
-        {
+    float *MatrizTeste = CriaMatriz(Linhas + 1, Colunas + 2);
 
-            float Valor = 0.3 * Matriz[i][j].R + 0.59 * Matriz[i][j].G + 0.11 * Matriz[i][j].B;
+    // Coloca os valores dentro da matriz de intensidade luminosa
+    for (int i = 0; i < Linhas; i++)
+    {
+        for (int j = 0; j < Colunas; j++)
+        {
+            float Valor = 0.3 * ImagemEntrada.RGB[i][j].R + 0.59 * ImagemEntrada.RGB[i][j].G + 0.11 * ImagemEntrada.RGB[i][j].B;
+            ImagemEntrada.RGB[i][j].Indice = i * Linhas + j;
             MatrizIL[i * Linhas + j] = Valor;
         }
     }
+
 
     /*Cria matriz extendida para poder aplicar o filtro de Sobel corretamente. Ou seja,
    extendemos a Matriz de Intensidade Luminosa
    */
     int LinhasExtend = Linhas + 2;
-    int ColunasExtend = Colunas + 2;
+    int ColunasExtend = Colunas + 1;
     float *MatrizExtendida = CriaMatriz(LinhasExtend, ColunasExtend);
 
+    //Indice para percorrer a matriz Luminosa
     int indice = 0;
 
+    printf("Matriz: %d x %d\n", LinhasExtend, ColunasExtend);
     // Preenchendo a MatrizExtend com a MatrizDeIntensidadeLuminosa
-    for (int x = 1; x < ColunasExtend - 1; x++)
+    for (int x = 1; x < LinhasExtend - 1; x++)
     {
-        for (int y = 1; y < LinhasExtend - 1; y++)
+        for (int y = 1; y < ColunasExtend - 1; y++)
         {
-            MatrizExtendida[x * LinhasExtend + y] = MatrizIL[indice];
+            MatrizExtendida[x * ColunasExtend + y] = MatrizIL[indice];
             indice++;
         }
     }
+
+    //Até aqui: REVISADO
+
+    //Liberando memoria da Matriz de Intensidade Luminosa
+    free(MatrizIL);
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Duplicando os valores de linhas e colunas.
@@ -77,46 +73,54 @@ void main()
     int x = 0;
     while (x == 0)
     {
-        for (int y = 1; y < LinhasExtend - 1; y++)
+        for (int y = 1; y < ColunasExtend - 1; y++)
         {
             MatrizExtendida[x * ColunasExtend + y] = MatrizExtendida[1 * ColunasExtend + y];
         }
         x++;
     }
+
+    //Até aqui: REVISADO
+
     // Fazendo a linha da esquerda duplicar(Excluindo as Kinas da esquerda, superior e inferior)
-    for (int x = 1; x < ColunasExtend - 1; x++)
+    for (int x = 1; x < LinhasExtend - 1; x++)
     {
         for (int y = 0; y < 1; y++)
         {
-            MatrizExtendida[x * LinhasExtend + y] = MatrizExtendida[x * LinhasExtend + 1];
+            MatrizExtendida[x * ColunasExtend + y] = MatrizExtendida[x * ColunasExtend + 1];
         }
     }
+
+    //Até aqui: REVISADO
 
     // Duplica a ultima linha
-    for (int j = 1; j < LinhasExtend - 1; j++)
+    for (int j = 1; j < ColunasExtend - 1; j++)
     {
-        MatrizExtendida[(ColunasExtend - 1) * ColunasExtend + j] = MatrizExtendida[(ColunasExtend - 2) * ColunasExtend + j];
+        MatrizExtendida[(LinhasExtend - 1) * LinhasExtend + j] = MatrizExtendida[(LinhasExtend - 2) * LinhasExtend + j];
     }
 
-    // Duplica a linha na direita
-    for (int x = 0; x < ColunasExtend - 2; x++)
+    //Até aqui: REVISADO
+
+    //Duplica linha da direita
+    for (int x = 2; x < LinhasExtend; x++)
     {
-        for (int y = LinhasExtend; y < LinhasExtend + 1; y++)
-        {
-            MatrizExtendida[x * ColunasExtend + LinhasExtend + y - 1] = MatrizExtendida[x * ColunasExtend + LinhasExtend + y - 2];
-        }
+        MatrizExtendida[x * ColunasExtend - 1] = MatrizExtendida[x * ColunasExtend - 2];
     }
+
+    //Até aqui: REVISADO
 
     // Resolvendo o Problema das 4 quinas;
-    MatrizExtendida[0] = MatrizExtendida[1 * ColunasExtend + 1]; // Superior(Esquerda)
+    MatrizExtendida[0] = MatrizExtendida[ColunasExtend + 1]; // Superior(Esquerda)
 
-    MatrizExtendida[ColunasExtend - 1] = MatrizExtendida[1 * ColunasExtend + ColunasExtend - 2]; // Superior(Direita)
+    MatrizExtendida[ColunasExtend - 1] = MatrizExtendida[ColunasExtend + ColunasExtend - 2]; // Superior(Direita)
 
-    MatrizExtendida[LinhasExtend * (ColunasExtend - 1)] = MatrizExtendida[(ColunasExtend - 2) * ColunasExtend + 1]; // Inferior Esquerda
+    MatrizExtendida[(LinhasExtend - 1) * ColunasExtend] = MatrizExtendida[(LinhasExtend - 2) * ColunasExtend + 1]; // Inferior Esquerda
 
-    MatrizExtendida[(LinhasExtend * ColunasExtend) - 1] = MatrizExtendida[(ColunasExtend - 2) * ColunasExtend + LinhasExtend - 1]; // Inferior Direita
+    MatrizExtendida[LinhasExtend * ColunasExtend - 1] = MatrizExtendida[(LinhasExtend - 1) * ColunasExtend - 2]; // Inferior Direita
 
     /////////////////////////////////////////////////////////////////////////////////////////
+
+    //Até aqui: REVISADO
 
     // Criamos a matriz para receber os valores do gradiente.
     float *MatrizWPesos = CriaMatriz(Linhas, Colunas);
@@ -133,17 +137,17 @@ void main()
 
     int idx = 0;
 
-    for (int x = 1; x < ColunasExtend - 1; x++)
+    for (int x = 1; x < LinhasExtend - 1; x++)
     {
-        for (int y = 1; y < LinhasExtend - 1; y++)
+        for (int y = 1; y < ColunasExtend - 1; y++)
         {
 
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    pixel_x += sobel_x[i][j] * MatrizExtendida[ColunasExtend * (y - 1 + i) + (x - 1 + j)];
-                    pixel_y += sobel_y[i][j] * MatrizExtendida[ColunasExtend * (y - 1 + i) + (x - 1 + j)];
+                    pixel_x += sobel_x[i][j] * MatrizExtendida[LinhasExtend * (y - 1 + i) + (x - 1 + j)];
+                    pixel_y += sobel_y[i][j] * MatrizExtendida[LinhasExtend * (y - 1 + i) + (x - 1 + j)];
                 }
             }
             float e = (float)sqrt((pixel_x * pixel_x) + (pixel_y * pixel_y));
@@ -154,15 +158,20 @@ void main()
         }
     }
 
+    //Até aqui: REVISADO
+
+    //Liberando o espaço da Matriz de Intensidade Luminosa Extendida
+    free(MatrizExtendida);
+
     // ImprimeMatriz(MatrizWPesos, Linhas, Colunas);
     float *MatrizDinamica = CriaMatriz(Linhas, Colunas);
 
     // Parei aqui, agora so falta achar o menor caminho e depois fazer funções retira linhas e retira coluna
 
     // Produzindo a MatrizDinamica, pesos devidamente somados ao longo das colunas para poder encontrar o melhor caminho
-    for (int x = 0; x < Colunas; x++)
+    for (int x = 0; x < Linhas; x++)
     {
-        for (int y = 0; y < Linhas; y++)
+        for (int y = 0; y < Colunas; y++)
         {
             if (x * Linhas == 0)
             {
@@ -212,30 +221,30 @@ void main()
             }
         }
     }
-    // ImprimeMatriz(MatrizWPesos, Linhas, Colunas);
-    printf("\n-------------------------------\n");
-    ImprimeMatriz(MatrizDinamica, Linhas, Colunas);
+
+    //Liberando a memoria da Matriz com as "Importâncias" de cada pixel
+    free(MatrizWPesos);
 
     int k = 0;
-    float * List = malloc(Linhas * sizeof(float));
+    float *List = malloc(Colunas * sizeof(float));
     int y = 0;
     while (k == 0)
     {
 
-        for (y = 0; y < Colunas; y++)
+        for (y = 0; y < Linhas; y++)
         {
             List[y] = MatrizDinamica[y];
         }
 
-        List[y] = '\0'; // Sinaliza como final da lista
-
         k++;
     }
-    int PosMenorNmr = PosicaoMenor(List);
+    int PosMenorNmr = PosicaoMenor(List, Colunas);
     int *Lista = (int *)malloc(Linhas * sizeof(int));
-    PosicaoDosMenoresCaminhos(MatrizDinamica, PosMenorNmr, Linhas, Colunas, &Lista);
-    ImprimeListaIndices(Lista);
+    PosicaoDosMenoresCaminhos(MatrizDinamica, PosMenorNmr, Linhas, Colunas, Lista);
+    //ImprimeListaIndices(Lista, Linhas);
 
-    //PAREI AQUI: falta atribuir de forma correta os indices do menor caminho da matriz na ultima função de Matriz.c
-    //falta também fazer a função para transpor a matriz.
+    RemoveCaminho(ImagemEntrada, Lista, Linhas, Colunas);
+
+    //MatrizTransposta(MatrizDinamica, Linhas, Colunas);
+    //Fazer transposta da Matriz
 }
